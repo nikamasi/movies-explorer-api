@@ -1,3 +1,5 @@
+const AUTH_ERROR = 'Authorization error';
+
 const DELETION_NOT_ALLOWED = 'Not allowed to remove other users movies.';
 
 const EMAIL_NOT_UNIQUE = 'A user with this email already exists.';
@@ -18,6 +20,7 @@ const SERVER_ERROR = 'Server error.';
 const USER_NOT_FOUND = 'A user with this id does not exist.';
 
 module.exports = {
+  AUTH_ERROR,
   USER_NOT_FOUND,
   INVALID_ID,
   EMAIL_NOT_UNIQUE,
