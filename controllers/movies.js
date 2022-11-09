@@ -6,7 +6,7 @@ const Movie = require('../models/movie');
 const { DELETION_NOT_ALLOWED, MOVIE_NOT_FOUND, INVALID_ID } = require('../utils/constants');
 
 const getMovies = (req, res, next) => {
-  Movie.find({})
+  Movie.find({ owner: req.user._id })
     .then((movies) => {
       res.send(movies);
     })
