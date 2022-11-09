@@ -6,9 +6,7 @@ const NotFoundError = require('../errors/NotFoundError');
 const ConflictError = require('../errors/ConflictError');
 const User = require('../models/user');
 const { USER_NOT_FOUND, INVALID_ID, EMAIL_NOT_UNIQUE } = require('../utils/constants');
-const { devJwtKey } = require('../utils/config');
-
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { JWT_KEY } = require('../utils/config');
 
 const getUserById = (req, res, next) => {
   User.findById(req.params.userId).orFail(() => next(new NotFoundError(USER_NOT_FOUND)))
@@ -63,7 +61,7 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : devJwtKey,
+        JWT_KEY,
         { expiresIn: '7d' },
       );
       return res.send({ token });
@@ -90,6 +88,8 @@ const updateUser = (req, res, next) => {
     .catch((e) => {
       if (e.name === 'ValidationError') {
         next(new BadRequestError(e.message));
+      } else if (e.codeName === 'DuplicateKey') {
+        next(new ConflictError(EMAIL_NOT_UNIQUE));
       } else {
         next(e);
       }

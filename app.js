@@ -8,19 +8,19 @@ const cors = require('./middlewares/cors');
 const rateLimiter = require('./middlewares/rateLimiter');
 const router = require('./routes/index');
 const errorHandler = require('./middlewares/errorHandler');
-const { mongodbLink } = require('./utils/config');
+const { MONGO_DB } = require('./utils/config');
 
 const { PORT = 3000 } = process.env;
 const app = express();
 
-mongoose.connect(mongodbLink, {
+mongoose.connect(MONGO_DB, {
   useNewUrlParser: true,
   useUnifiedTopology: false,
 });
 
 app.use(helmet());
-app.use(rateLimiter);
 app.use(requestLogger);
+app.use(rateLimiter);
 app.use(cors);
 app.use(express.json());
 
